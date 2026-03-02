@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 
-const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "omyanmar-super-secret-key");
+const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "omyalmar-super-secret-key");
 
 export async function submitBooking(formData: FormData) {
   const travelDate = formData.get("travelDate") as string;
@@ -157,7 +157,7 @@ export default async function BookingPage({
               <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-4">Traveler Information</h2>
               
               {/* ✅ ပြင်ဆင်ထားသော နေရာ: encType="multipart/form-data" ကို ထည့်ပေးထားပါသည် */}
-              <form action={submitBooking} encType="multipart/form-data" className="space-y-6">
+              <form action={submitBooking} className="space-y-6" >
                 <input type="hidden" name="priceId" value={priceId} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
