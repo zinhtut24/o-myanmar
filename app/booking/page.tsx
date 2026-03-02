@@ -157,7 +157,7 @@ export default async function BookingPage({
               <h2 className="text-xl font-bold text-gray-900 mb-6 border-b pb-4">Traveler Information</h2>
               
               {/* ✅ ပြင်ဆင်ထားသော နေရာ: encType="multipart/form-data" ကို ထည့်ပေးထားပါသည် */}
-              <form action={submitBooking} className="space-y-6">
+              <form action={submitBooking} encType="multipart/form-data" className="space-y-6">
                 <input type="hidden" name="priceId" value={priceId} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
