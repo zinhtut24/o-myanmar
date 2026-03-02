@@ -111,11 +111,19 @@ export default function HeroSection({ tours }: { tours: any[] }) {
             </Swiper>
 
             {/* Navigation Buttons */}
+            {/* Navigation Buttons */}
             <div className="flex gap-4 mt-10 justify-end pr-8">
-              <button className="hero-prev w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-orange-600 transition-all shadow-lg active:scale-90">
+              <button 
+                suppressHydrationWarning // 👈 ဒါလေး ထည့်လိုက်ပါ
+                className="hero-prev w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-orange-600 transition-all shadow-lg active:scale-90"
+              >
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <button className="hero-next w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-orange-600 transition-all shadow-lg active:scale-90">
+                        
+              <button 
+                suppressHydrationWarning // 👈 ဒါလေးပါ ထည့်ပါ
+                className="hero-next w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-orange-600 transition-all shadow-lg active:scale-90"
+              >
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
