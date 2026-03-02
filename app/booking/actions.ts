@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 
-const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "omyalmar-super-secret-key");
+const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "omyanmar-super-secret-key");
 
 export async function submitBooking(formData: FormData) {
   const travelDate = formData.get("travelDate") as string;
