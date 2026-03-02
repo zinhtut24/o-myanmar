@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- ENUMS (ရွေးချယ်စရာ စာရင်းသေများ) ---
+
+enum Role {
+  USER
+  ADMIN
+  AGENT
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentMethod {
+  CASH
+  KPAY
+  WAVEPAY
+}
+
+// --- CORE MODELS (အဓိက ဇယားများ) ---
+
+// 1. ကားအမျိုးအစားများ
+model Vehicle {
+  id       String  @id @default(cuid())
+  name     String // ဥပမာ - Alphard (7-Seater)
+  capacity Int // ဥပမာ - 7
+  image    String?
+
+  tourPrices TourPrice[]
+  bookings   Booking[]
+
+  createdAt DateTime @default(now())
+}
+
+// 2. ခရီးစဉ် ပင်မခေါင်းစဉ်
+model TourPackage {
+  id          String   @id @default(cuid())
+  title       String // ဥပမာ - ပုဂံ ဘုရားဖူးခရီးစဉ်
+  slug        String   @unique
+  description String
+  location    String
+  images      String[]
+  isFeatured  Boolean  @default(false)
+
+  plans TourPlan[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 3. ခရီးစဉ် ကြာချိန်အစီအစဉ်များ
+model TourPlan {
+  id           String @id @default(cuid())
+  name         String // ဥပမာ - ၂ ညအိပ် ၃ ရက်
+  durationDays Int // ဥပမာ - 3
+  itinerary    Json? // နေ့စဉ်အစီအစဉ်
+
+  tourPackageId String
+  tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id], onDelete: Cascade)
+
+  prices   TourPrice[]
+  bookings Booking[]
+}
+
+// 4. ဈေးနှုန်းနှင့် စရံငွေ (Plan + Vehicle = Price)
+model TourPrice {
+  id String @id @default(cuid())
+
+  tourPlanId String
+  tourPlan   TourPlan @relation(fields: [tourPlanId], references: [id], onDelete: Cascade)
+
+  vehicleId String
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  price   Decimal // စုစုပေါင်း ကျသင့်ငွေ
+  deposit Decimal // ကြိုသွင်းရမည့် စရံငွေ
+
+  @@unique([tourPlanId, vehicleId])
+}
+
+// 5. Booking စာရင်းများ
+model Booking {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  tourPlanId String
+  tourPlan   TourPlan @relation(fields: [tourPlanId], references: [id])
+
+  vehicleId String
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+
+  bookingDate DateTime // ခရီးသွားမည့်ရက်
+  totalPrice  Decimal
+  depositPaid Decimal
+
+  status        BookingStatus  @default(PENDING)
+  paymentMethod PaymentMethod?
+  paymentProof  String? // KPay Screenshot URL
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 6. အသုံးပြုသူများ (Customers & Admins)
+model User {
+  id        String    @id @default(cuid())
+  name      String?
+  email     String    @unique
+  password  String?
+  phone     String?
+  image     String?
+  role      Role      @default(USER)
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  reviews   Review[]
+}
+
+// ဧည့်သည်များထံမှ ဝင်လာသော ဆက်သွယ်ရန် မက်ဆေ့ချ်များ
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  isRead    Boolean  @default(false) // Admin ဖတ်ပြီး/မဖတ်ရသေး ခွဲရန်
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id            String      @id @default(cuid())
+  userId        String      
+  user          User        @relation(fields: [userId], references: [id]) // 👈 User model နဲ့ ချိတ်ထားတာ
+  type          ReviewType  @default(GENERAL)
+  rating        Int         @default(5)
+  comment       String      @db.Text
+  adminReply    String?     @db.Text
+  createdAt     DateTime    @default(now())
+
+  @@index([userId])
+}
+
+enum ReviewType {
+  CAR        // ကားအတွက် Review
+  DRIVER     // ယာဉ်မောင်းအတွက် Review
+  SERVICE    // ဝန်ဆောင်မှုအတွက် Review
+  GENERAL    // တခြား အထွေထွေ Review
+}
