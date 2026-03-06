@@ -8,12 +8,10 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-        {/* အစိမ်းရောင် Check အစား အဝါရောင် နာရီပုံစံ (Pending) ပြောင်းထားပါသည် */}
         <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <Clock className="w-10 h-10 text-orange-500" />
         </div>
         
-        {/* စာသားများကို သင့်လျော်သလို ပြင်ဆင်ထားပါသည် */}
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Booking Received!</h1>
         <p className="text-gray-600 mb-6 leading-relaxed">
           Thank you for choosing O! Myanmar Travel. Your booking ID is <span className="font-mono font-bold text-purple-600">#{bookingId.slice(-6).toUpperCase()}</span>. <br/><br/>

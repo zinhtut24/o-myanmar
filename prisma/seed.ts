@@ -28,33 +28,109 @@ async function main() {
   const minibus = await prisma.vehicle.create({ data: { name: "Mini Bus (22 Seater)", capacity: 22, image: "/vehicles/minibus.jpg" } });
   const bus = await prisma.vehicle.create({ data: { name: "Express Bus (33 Seater)", capacity: 33, image: "/vehicles/bus.jpg" } });
 
+  // Text Templates
   const inclusiveText = "Car rental, fuel, toll gate fees, and driver fees are all inclusive. Enjoy a hassle-free journey.";
+  const guideInclusiveText = "Car rental, fuel, toll gate fees, driver fees, and a professional tour guide are all inclusive. Enjoy a hassle-free journey.";
 
-  // ==========================================
-  // TOUR 1: Yangon City Tour
-  // ==========================================
-  const yangon = await prisma.tourPackage.create({
-    data: {
-      title: "Yangon City Sightseeing", slug: "yangon-city",
-      description: `Explore the commercial capital of Myanmar. ${inclusiveText}`,
-      location: "Yangon Region", images: ["/image/Ygn.jpg"], isFeatured: true,
-    }
+  // Helper Function for Pricing (ဈေးနှုန်းများကို အလွယ်တကူ တွက်ချက်ပေးရန်)
+  const getDayPrices = (basePrice: number) => ({
+    create: [
+      { vehicleId: salon.id, price: basePrice, deposit: basePrice * 0.2 },
+      { vehicleId: alphard.id, price: basePrice * 1.5, deposit: basePrice * 1.5 * 0.2 },
+      { vehicleId: hiace.id, price: basePrice * 1.8, deposit: basePrice * 1.8 * 0.2 },
+      { vehicleId: minibus.id, price: basePrice * 3, deposit: basePrice * 3 * 0.2 },
+      { vehicleId: bus.id, price: basePrice * 4, deposit: basePrice * 4 * 0.2 }
+    ]
   });
-  
-  await prisma.tourPlan.create({ 
-    data: { 
-        name: "Half Day Tour", 
-        durationDays: 1, 
-        tourPackageId: yangon.id, 
-        prices: { 
-            create: [ {
-                 vehicleId: salon.id, price: 50000, deposit: 10000 }, { vehicleId: alphard.id, price: 80000, deposit: 20000 }, { vehicleId: hiace.id, price: 100000, deposit: 20000 }, { vehicleId: minibus.id, price: 150000, deposit: 30000 }, { vehicleId: bus.id, price: 200000, deposit: 50000 } ] } } });
-  await prisma.tourPlan.create({ data: { name: "Full Day Tour", durationDays: 1, tourPackageId: yangon.id, prices: { create: [ { vehicleId: salon.id, price: 80000, deposit: 20000 }, { vehicleId: alphard.id, price: 120000, deposit: 30000 }, { vehicleId: hiace.id, price: 150000, deposit: 40000 }, { vehicleId: minibus.id, price: 250000, deposit: 50000 }, { vehicleId: bus.id, price: 350000, deposit: 80000 } ] } } });
+
+  // ==========================================
+  // အသစ်ထပ်ထည့်ထားသော DAY TRIPS & TOURS များ
+  // ==========================================
+
+  // 1. Yangon City Sightseeing (Full Day ပဲ ထားပါမည်)
+  const yangon = await prisma.tourPackage.create({
+    data: { title: "Yangon City Sightseeing", slug: "yangon-city", description: `Explore the commercial capital of Myanmar. ${inclusiveText}`, location: "Yangon Region", images: ["/image/Ygn.jpg"], isFeatured: true }
+  });
+  await prisma.tourPlan.create({ data: { name: "Full Day Tour", durationDays: 1, tourPackageId: yangon.id, prices: getDayPrices(80000) } });
+
+  // 2. Yangon Walking Tour (Guide + Car)
+  const ygnWalking = await prisma.tourPackage.create({
+    data: { title: "Yangon Walking Tour", slug: "yangon-walking-tour", description: `Immerse yourself in the colonial heritage and vibrant streets of Yangon downtown. ${guideInclusiveText}`, location: "Yangon Region", images: ["/image/ygn-walking.jpg"], isFeatured: false }
+  });
+  await prisma.tourPlan.create({ data: { name: "Full Day Tour", durationDays: 1, tourPackageId: ygnWalking.id, prices: getDayPrices(100000) } });
+
+  // 3. Yangon Circle Train + Shwedagon
+  const circleTrain = await prisma.tourPackage.create({
+    data: { title: "Yangon Circle Train & Shwedagon Pagoda", slug: "yangon-circle-train", description: `Experience the local lifestyle on the circular train and visit the majestic Shwedagon Pagoda. ${inclusiveText}`, location: "Yangon Region", images: ["/image/shwedagon.jpg"], isFeatured: false }
+  });
+  await prisma.tourPlan.create({ data: { name: "Full Day Tour", durationDays: 1, tourPackageId: circleTrain.id, prices: getDayPrices(90000) } });
+
+  // 4. Dala - Museum - Shopping tour
+  const dala = await prisma.tourPackage.create({
+    data: { title: "Dalla, Museum & Shopping Tour", slug: "dalla-museum-shopping", description: `Cross the Yangon river to explore Dalla, visit national museums, and shop at Bogyoke Market. ${inclusiveText}`, location: "Yangon Region", images: ["/image/dalla.jpg"], isFeatured: false }
+  });
+  await prisma.tourPlan.create({ data: { name: "Full Day Tour", durationDays: 1, tourPackageId: dala.id, prices: getDayPrices(100000) } });
+
+  // 5. Yangon - Kyaiktiyo Day trip (Guide + Car)
+  const kyaiktiyoDay = await prisma.tourPackage.create({
+    data: { title: "Yangon to Kyaiktiyo Day Trip", slug: "yangon-kyaiktiyo-day", description: `A spiritual journey to the famous Golden Rock Pagoda from Yangon. ${guideInclusiveText}`, location: "Mon State", images: ["/image/kyite.jpg"], isFeatured: true }
+  });
+  await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: kyaiktiyoDay.id, prices: getDayPrices(150000) } });
+
+  // 6. Yangon - Bago Day trip (Guide + Car)
+  const bagoDay = await prisma.tourPackage.create({
+    data: { title: "Yangon to Bago Day Trip", slug: "yangon-bago-day", description: `Visit the famous Shwemawdaw Pagoda and historic Kanbawzathadi Palace. ${guideInclusiveText}`, location: "Bago Region", images: ["/image/ygn-bogo.jpg"], isFeatured: false }
+  });
+  await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: bagoDay.id, prices: getDayPrices(130000) } });
+
+  // 7. Yangon - Thanlyin Day trip (Guide + Car)
+  const thanlyinDay = await prisma.tourPackage.create({
+    data: { title: "Yangon to Thanlyin Day Trip", slug: "yangon-thanlyin-day", description: `Discover the ancient port city of Thanlyin and the Ye Le Pagoda. ${guideInclusiveText}`, location: "Yangon Region", images: ["/image/than.jpg"], isFeatured: false }
+  });
+  await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: thanlyinDay.id, prices: getDayPrices(110000) } });
+
+  // 8. Yangon - Mount Popa Day trip (Guide + Car)
+  const ygnPopa = await prisma.tourPackage.create({
+    data: { title: "Yangon to Mount Popa Day Trip", slug: "yangon-popa-day", description: `An epic day trip from Yangon to the mystical Mount Popa. ${guideInclusiveText}`, location: "Mandalay Region", images: ["/image/pp.jpg"], isFeatured: false }
+  });
+  await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: ygnPopa.id, prices: getDayPrices(400000) } });
+
+  // 9. Bagan - Mount Popa Day trip (Guide + Car)
+  const bgnPopa = await prisma.tourPackage.create({
+    data: { title: "Bagan to Mount Popa Day Trip", slug: "bagan-popa-day", description: `Visit the mystical extinct volcano and the home of Myanmar's nats from Bagan. ${guideInclusiveText}`, location: "Mandalay Region", images: ["/image/bagan-pp.jpg"], isFeatured: true }
+  });
+  await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: bgnPopa.id, prices: getDayPrices(90000) } });
+
+  // 10. Mandalay City Sightseeing (Guide + Car)
+  const mdyCity = await prisma.tourPackage.create({
+    data: { title: "Mandalay City Sightseeing", slug: "mandalay-city-sightseeing", description: `Explore Mandalay Palace, Kuthodaw, and Mandalay Hill. ${guideInclusiveText}`, location: "Mandalay Region", images: ["/image/mdyss.jpg"], isFeatured: true }
+  });
+  await prisma.tourPlan.create({ data: { name: "Full Day Tour", durationDays: 1, tourPackageId: mdyCity.id, prices: getDayPrices(90000) } });
+
+  // 11. Mandalay Pyin Oo Lwin Day trip (Guide + Car)
+  const mdyPolDay = await prisma.tourPackage.create({
+    data: { title: "Mandalay to Pyin Oo Lwin Day Trip", slug: "mandalay-pol-day", description: `Enjoy the cool weather, botanical gardens, and waterfalls of Pyin Oo Lwin. ${guideInclusiveText}`, location: "Mandalay Region", images: ["/image/mdy-pol.jpg"], isFeatured: false }
+  });
+  await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: mdyPolDay.id, prices: getDayPrices(120000) } });
+
+  // 12. Mandalay - Amarapura - Innwa Day trip (Guide + Car)
+  const mdyAmaInnwa = await prisma.tourPackage.create({
+    data: { title: "Mandalay - Amarapura - Innwa Day Trip", slug: "mandalay-amarapura-innwa", description: `Explore the ancient capitals, traditional workshops, and sunset at U Bein Bridge. ${guideInclusiveText}`, location: "Mandalay Region", images: ["/image/ama.jpg"], isFeatured: false }
+  });
+  await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: mdyAmaInnwa.id, prices: getDayPrices(110000) } });
+
+  // 13. Airport Transfer (Pickup / Drop-off)
+  const airport = await prisma.tourPackage.create({
+    data: { title: "Airport Pick-up / Drop-off Transfer", slug: "airport-transfer", description: `Reliable and comfortable airport transfer services to your hotel or destination. ${inclusiveText}`, location: "Any Airport", images: ["/image/transfer.jpg"], isFeatured: false }
+  });
+  await prisma.tourPlan.create({ data: { name: "One Way Transfer", durationDays: 1, tourPackageId: airport.id, prices: getDayPrices(50000) } });
 
 
   // ==========================================
-  // TOUR 2: Bagan (Only)
+  // ယခင်ရှိပြီးသား (Multi-day) ခရီးစဉ်များကို မူလအတိုင်းထားရှိခြင်း
   // ==========================================
+
+  // TOUR: Bagan (Only)
   const bagan = await prisma.tourPackage.create({
     data: {
       title: "Bagan Ancient City Exploration", slug: "bagan-only",
@@ -274,7 +350,7 @@ async function main() {
     await prisma.tourPlan.create({ data: { name: plan.name, durationDays: plan.days, tourPackageId: kyaiktiyo.id, prices: { create: [ { vehicleId: salon.id, price: plan.p, deposit: plan.p*0.2 }, { vehicleId: alphard.id, price: plan.p*1.5, deposit: plan.p*1.5*0.2 }, { vehicleId: hiace.id, price: plan.p*1.8, deposit: plan.p*1.8*0.2 }, { vehicleId: minibus.id, price: plan.p*3, deposit: plan.p*3*0.2 }, { vehicleId: bus.id, price: plan.p*4, deposit: plan.p*4*0.2 } ] } } });
   }
 
-  console.log("✅ ALL explicit explicit pricing seeded successfully!");
+  console.log("✅ ALL explicit pricing and new day trips seeded successfully!");
 }
 
 main()

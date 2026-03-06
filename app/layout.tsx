@@ -1,31 +1,51 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import { Inter } from "next/font/google";
+import "./globals.css"; 
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer"; 
+import Footer from "@/components/Footer";
+import { cookies } from 'next/headers';
+import { jwtVerify } from 'jose';
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "O! Myanmar Travel",
-  description: "Discover the beauty of Myanmar with O! Myanmar Travel. Car rental, tours, and inclusive packages.",
+  description: "Explore the beauty of Myanmar with us.",
 };
 
-export default function RootLayout({
+const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "omyalmar-super-secret-key");
+
+export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("user-token")?.value || cookieStore.get("admin-token")?.value;
+
+  let role = null;
+  let userName = null;
+
+  if (token) {
+    try {
+      const verified = await jwtVerify(token, SECRET_KEY);
+      role = verified.payload.role as string;
+      userName = verified.payload.name as string;
+    } catch (err) {
+      console.log("Auth error in layout:", err);
+    }
+  }
+
   return (
     <html lang="en">
-      <body suppressHydrationWarning className="antialiased bg-slate-50 flex flex-col min-h-screen">
-       
-        {/* Navbar, Main, Footer အားလုံးသည် body အထဲတွင်သာ ရှိရပါမည် */}
-        <Navbar />
+      <body className={inter.className} suppressHydrationWarning={true}>
+        <Navbar role={role} userName={userName} />
         
-        <main className="flex-grow">
-          {children}
+        <main className="min-h-screen">
+          {children} 
         </main>
 
-        <Footer />
-        
+        <Footer /> 
       </body>
     </html>
   );

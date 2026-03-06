@@ -27,8 +27,12 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   const totalRevenue = confirmedBookings.reduce((sum, b) => sum + Number(b.totalPrice), 0);
 
   const formatMoney = (amount: any) => new Intl.NumberFormat('en-MM').format(Number(amount));
-  const formatDate = (date: Date) => new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(date);
-
+const formatDate = (date: any) => {
+  if (!date) return "N/A"; // ရက်စွဲမရှိရင် N/A လို့ပဲ ပြမယ်
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "N/A"; // Format မှားနေရင်လည်း N/A လို့ပဲ ပြမယ်
+  return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(d);
+};
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8 italic">
       <div className="max-w-7xl mx-auto">
