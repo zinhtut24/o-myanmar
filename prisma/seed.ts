@@ -79,7 +79,7 @@ async function main() {
 
   // 6. Yangon - Bago Day trip (Guide + Car)
   const bagoDay = await prisma.tourPackage.create({
-    data: { title: "Yangon to Bago Day Trip", slug: "yangon-bago-day", description: `Visit the famous Shwemawdaw Pagoda and historic Kanbawzathadi Palace. ${guideInclusiveText}`, location: "Bago Region", images: ["/image/ygn-bogo.jpg"], isFeatured: false }
+    data: { title: "Yangon to Bago Day Trip", slug: "yangon-bago-day", description: `Visit the famous Shwemawdaw Pagoda and historic Kanbawzathadi Palace. ${guideInclusiveText}`, location: "Bago Region", images: ["/image/ygn-bago.jpg"], isFeatured: false }
   });
   await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: bagoDay.id, prices: getDayPrices(130000) } });
 
@@ -250,25 +250,85 @@ async function main() {
   // ==========================================
   // TOUR 8: Chaung Tha
   // ==========================================
+  // ==========================================
+  // TOUR 8: Chaung Tha (Updated with Loop Pricing)
+  // ==========================================
   const chaungtha = await prisma.tourPackage.create({
     data: {
-      title: "Chaung Tha Beach Trip", slug: "chaungtha-beach",
+      title: "Chaung Tha Beach Trip",
+      slug: "chaungtha-beach",
       description: `A lively and fun beach destination. ${inclusiveText}`,
-      location: "Ayeyarwady Region", images: ["/image/ct.jpg"], isFeatured: false,
+      location: "Ayeyarwady Region",
+      images: ["/image/ct.jpg"],
+      isFeatured: false,
     }
   });
 
+  const ctPrices = [
+    { days: 2, name: "1 Night 2 Days", p: 180000 },
+    { days: 3, name: "2 Nights 3 Days", p: 250000 },
+    { days: 4, name: "3 Nights 4 Days", p: 320000 },
+    { days: 5, name: "4 Nights 5 Days", p: 400000 }
+  ];
+
+  for (const plan of ctPrices) {
+    await prisma.tourPlan.create({
+      data: {
+        name: plan.name,
+        durationDays: plan.days,
+        tourPackageId: chaungtha.id,
+        prices: {
+          create: [
+            { vehicleId: salon.id, price: plan.p, deposit: plan.p * 0.2 },
+            { vehicleId: alphard.id, price: plan.p * 1.5, deposit: plan.p * 1.5 * 0.2 },
+            { vehicleId: hiace.id, price: plan.p * 1.8, deposit: plan.p * 1.8 * 0.2 },
+            { vehicleId: minibus.id, price: plan.p * 3, deposit: plan.p * 3 * 0.2 },
+            { vehicleId: bus.id, price: plan.p * 4, deposit: plan.p * 4 * 0.2 }
+          ]
+        }
+      }
+    });
+  }
 
   // ==========================================
-  // TOUR 9: Kyaiktiyo
+  // TOUR 9: Kyaiktiyo (Updated with Loop Pricing)
   // ==========================================
   const kyaiktiyo = await prisma.tourPackage.create({
     data: {
-      title: "Kyaiktiyo (Golden Rock) Pilgrimage", slug: "golden-rock",
+      title: "Kyaiktiyo (Golden Rock) Pilgrimage",
+      slug: "golden-rock",
       description: `A spiritual journey to the famous Golden Rock Pagoda. ${inclusiveText}`,
-      location: "Mon State", images: ["/image/khy.jpg"], isFeatured: false,
+      location: "Mon State",
+      images: ["/image/khy.jpg"],
+      isFeatured: false,
     }
   });
+
+  const kytPrices = [
+    { days: 1, name: "Day Return", p: 150000 },
+    { days: 2, name: "1 Night 2 Days", p: 250000 },
+    { days: 3, name: "2 Nights 3 Days", p: 350000 },
+    { days: 4, name: "3 Nights 4 Days", p: 450000 }
+  ];
+
+  for (const plan of kytPrices) {
+    await prisma.tourPlan.create({
+      data: {
+        name: plan.name,
+        durationDays: plan.days,
+        tourPackageId: kyaiktiyo.id,
+        prices: {
+          create: [
+            { vehicleId: salon.id, price: plan.p, deposit: plan.p * 0.2 },
+            { vehicleId: alphard.id, price: plan.p * 1.5, deposit: plan.p * 1.5 * 0.2 },
+            { vehicleId: hiace.id, price: plan.p * 1.8, deposit: plan.p * 1.8 * 0.2 },
+            { vehicleId: minibus.id, price: plan.p * 3, deposit: plan.p * 3 * 0.2 },
+            { vehicleId: bus.id, price: plan.p * 4, deposit: plan.p * 4 * 0.2 }
+          ]
+        }
+      }
+    });
+  }
 
   // ==========================================
   // TOUR 10: Hpa-An (Adventure Trip)
@@ -343,8 +403,8 @@ async function main() {
   });
 
   const kyPrices = [
-    { days: 1, name: "Day Return", p: 150000 }, { days: 2, name: "1 Night 2 Days", p: 250000 },
-    { days: 3, name: "2 Nights 3 Days", p: 350000 }, { days: 4, name: "3 Nights 4 Days", p: 450000 }
+    { days: 1, name: "Day Return", p: 150000 }, { days: 2, name: "Day Return", p: 250000 },
+    { days: 2, name: "1 Nights 2 Days", p: 350000 }, { days: 3, name: "1 Nights 2 Days", p: 450000 }
   ];
   for (const plan of kyPrices) {
     await prisma.tourPlan.create({ data: { name: plan.name, durationDays: plan.days, tourPackageId: kyaiktiyo.id, prices: { create: [ { vehicleId: salon.id, price: plan.p, deposit: plan.p*0.2 }, { vehicleId: alphard.id, price: plan.p*1.5, deposit: plan.p*1.5*0.2 }, { vehicleId: hiace.id, price: plan.p*1.8, deposit: plan.p*1.8*0.2 }, { vehicleId: minibus.id, price: plan.p*3, deposit: plan.p*3*0.2 }, { vehicleId: bus.id, price: plan.p*4, deposit: plan.p*4*0.2 } ] } } });
