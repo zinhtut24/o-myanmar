@@ -4,7 +4,14 @@ import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const connectionString = process.env.DATABASE_URL;
-const pool = new Pool({ connectionString });
+
+const pool = new Pool({ 
+  connectionString,
+  // 💡 Vercel/Neon/Supabase တို့မှာ SSL Error မတက်အောင် ဒါလေး ထည့်ပေးရပါမယ်
+  ssl: {
+    rejectUnauthorized: false // 👈 ဒါက SSL certificate ကို server ကနေ လက်ခံပေးဖို့ပါ
+  }
+});
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
