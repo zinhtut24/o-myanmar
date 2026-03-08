@@ -104,9 +104,9 @@ import Link from "next/link";
     slug: "airport-transfer",
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15269!2d96.13!3d16.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30c19!2sYangon%20International%20Airport!5e0!3m2!1sen!2smm!4v123456789",
     images: [
-      "image/transfer.jpg",
-      "image/transfer.jpg",
-      "image/transfer.jpg",
+      "image/transfer-1.jpg",
+      "image/transfer-2.jpg",
+      "image/transfer-3.jpg",
       "image/transfer.jpg"
     ],
     itinerary: [
