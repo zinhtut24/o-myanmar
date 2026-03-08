@@ -197,7 +197,7 @@ export default async function BookingPage({
 
                 <div className="mt-6 p-6 bg-slate-50 border border-slate-200 rounded-xl border-dashed text-center">
                   <p className="text-sm text-gray-600 mb-2">If using KPay/Wave, please transfer the deposit and upload the screenshot.</p>
-                  <p className="font-bold text-purple-700 mb-4">Account No: 09 123 456 789 (U Aung)</p>
+                  <p className="font-bold text-purple-700 mb-4">Account No: 09 250 227 832 (Daw Hay Mar Thet Htwe)</p>
                   
                   <input type="file" name="paymentProof" accept="image/*" className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer" />
                 </div>
