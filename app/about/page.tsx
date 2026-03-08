@@ -122,7 +122,7 @@ export default async function AboutPage({ searchParams }: { searchParams: Promis
                 </div>
                 <div>
                   <p className="text-[10px] text-slate-400 font-bold uppercase">Email Us</p>
-                  <p className="text-sm font-bold text-slate-800">zinhtutnaing2410@gmail.com</p>
+                  <p className="text-sm font-bold text-slate-800">omyanmartour@gmail.com</p>
                 </div>
               </a>
 

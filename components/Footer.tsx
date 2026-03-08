@@ -3,7 +3,7 @@ import { Facebook, MessageCircle, Mail, Phone, MapPin, Music2 } from 'lucide-rea
 
 export default function Footer() {
   const phoneNumber = "+959975448448";
-  const emailAddress = "zinhtutnaing2410@gmail.com";
+  const emailAddress = "omyanmartour@gmail.com";
 
   return (
     <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
