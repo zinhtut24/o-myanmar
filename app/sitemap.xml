@@ -2,42 +2,53 @@ import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://www.omyanmartravel.com/' // 👈 အစ်ကို့ Domain အမှန်ကို ဒီမှာထည့်ပါ
+  // 💡 ၁။ baseUrl ရဲ့ အဆုံးမှာ / ကို ဖယ်လိုက်ပါ (URL ဆက်တဲ့အခါ အမှားနည်းအောင်လို့ပါ)
+  const baseUrl = 'https://www.omyanmartravel.com' 
 
-  // ၁။ Database ထဲက Tour ခရီးစဉ်အားလုံးကို ဆွဲထုတ်မည်
-  const tours = await prisma.tourPackage.findMany({
-    select: { slug: true, updatedAt: true }
-  })
+  try {
+    // ၂။ Database ထဲက Tour ခရီးစဉ်အားလုံးကို ဆွဲထုတ်မည်
+    const tours = await prisma.tourPackage.findMany({
+      select: { slug: true, updatedAt: true }
+    })
 
-  // ၂။ Tour တစ်ခုချင်းစီအတွက် URL သတ်မှတ်မည်
-  const tourUrls = tours.map((tour) => ({
-    url: `${baseUrl}/destinations/${tour.slug}`,
-    lastModified: tour.updatedAt,
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }))
+    // ၃။ Tour တစ်ခုချင်းစီအတွက် URL သတ်မှတ်မည်
+    const tourUrls = tours.map((tour) => ({
+      url: `${baseUrl}/destinations/${tour.slug}`,
+      lastModified: tour.updatedAt || new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
 
-  // ၃။ Static Page (ပင်မစာမျက်နှာများ) သတ်မှတ်မည်
-  const staticPages = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/destinations`,
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    },
-  ]
+    // ၄။ Static Page (ပင်မစာမျက်နှာများ)
+    const staticPages = [
+      {
+        url: baseUrl,
+        lastModified: new Date(),
+        changeFrequency: 'daily' as const,
+        priority: 1.0,
+      },
+      {
+        url: `${baseUrl}/destinations`,
+        lastModified: new Date(),
+        changeFrequency: 'daily' as const,
+        priority: 0.9,
+      },
+      {
+        url: `${baseUrl}/about`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.5,
+      },
+    ]
 
-  return [...staticPages, ...tourUrls]
+    return [...staticPages, ...tourUrls]
+  } catch (error) {
+    // Error တက်ရင် အနည်းဆုံး Static Pages တွေပဲ ပြန်ပို့ပေးပါမယ်
+    return [
+      {
+        url: baseUrl,
+        lastModified: new Date(),
+      }
+    ]
+  }
 }
