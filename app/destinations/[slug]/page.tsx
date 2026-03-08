@@ -29,7 +29,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
 
   // ✅ ငွေကြေး ပုံစံပြောင်းသည့် Function ($ ပြောင်းထားပါသည်)
   const formatMoney = (amount: any) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(amount));
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MMK' }).format(Number(amount));
   };
 
   return (
