@@ -15,7 +15,7 @@ import Link from "next/link";
       "image/bago.jpg",
       "image/bg-1.jpg",
       "image/bg-2.jpg",
-      "image/bago.jpg"
+      "image/bg-2.jpg"
     ],
     itinerary: [
       { day: 1, time: "07:30 AM", title: "Yangon Departure", desc: "Pick up from hotel and head towards Bago (approx. 2 hours)." },
@@ -35,10 +35,10 @@ import Link from "next/link";
     slug: "bagan-popa-day",
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3711.2345678!2d95.21!3d20.91!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30cb666!2sMount%20Popa!5e0!3m2!1sen!2smm!4v123456789",
     images: [
-      "image/popa.jpg",
       "image/bagan-pp.jpg",
-      "image/popa.jpg",
-      "image/bagan-pp.jpg"
+      "image/ba-1.jpg",
+      "image/pp-1.jpg",
+      "image/pp.jpg"
     ],
     itinerary: [
       { day: 1, time: "08:30 AM", title: "Departure from Bagan", desc: "Start driving through the palm-lined countryside." },
