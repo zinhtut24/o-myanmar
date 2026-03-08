@@ -104,9 +104,17 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                    Tour Guide Service
                 </h4>
                 {isGuideIncluded ? (
-                  <p className="text-xs text-green-700 leading-relaxed font-medium">
-                    Professional English/Myanmar speaking guide is **Included** in this package price.
-                  </p>
+                  <div className="space-y-2">
+                    <p className="text-xs text-orange-700 leading-relaxed">
+                      Tour guide is **Not Included** in this car rental price.
+                    </p>
+                    <div className="bg-white/60 p-2 rounded-lg border border-orange-100">
+                       <p className="text-[10px] font-bold text-slate-500 uppercase">Optional Guide Fee:</p>
+                       {/* MMK မှ $ သို့ ပြောင်းလဲထားသည် */}
+                       <p className="text-sm font-bold text-orange-600">$20 ~ $50 - $ 80 / day</p>
+                       <p className="text-[10px] text-slate-400 font-medium">*Paid directly to guide</p>
+                    </div>
+                  </div>
                 ) : (
                   <div className="space-y-2">
                     <p className="text-xs text-orange-700 leading-relaxed">
@@ -115,7 +123,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                     <div className="bg-white/60 p-2 rounded-lg border border-orange-100">
                        <p className="text-[10px] font-bold text-slate-500 uppercase">Optional Guide Fee:</p>
                        {/* MMK မှ $ သို့ ပြောင်းလဲထားသည် */}
-                       <p className="text-sm font-bold text-orange-600">$20 ~ $50 / day</p>
+                       <p className="text-sm font-bold text-orange-600">$20 ~ $50 - $ 80 / day</p>
                        <p className="text-[10px] text-slate-400 font-medium">*Paid directly to guide</p>
                     </div>
                   </div>
