@@ -58,9 +58,9 @@ import Link from "next/link";
     slug: "mandalay-city-sightseeing",
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14781.23456!2d96.08!3d21.97!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30cb6d!2sMandalay!5e0!3m2!1sen!2smm!4v123456789",
     images: [
-      "image/mdyss.jpg",
-      "image/mdyss.jpg",
-      "image/mdyss.jpg",
+      "image/mdy-1.jpg",
+      "image/mdy-2.jpg",
+      "image/mdy-3.jpg",
       "image/mdyss.jpg"
     ],
     itinerary: [
