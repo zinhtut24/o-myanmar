@@ -81,9 +81,9 @@ import Link from "next/link";
     slug: "mandalay-pol-day",
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3698.234!2d96.46!3d22.03!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30cb6!2sPyin%20Oo%20Lwin!5e0!3m2!1sen!2smm!4v123456789",
     images: [
-      "image/mdy-pol.jpg",
-      "image/mdy-pol.jpg",
-      "image/mdy-pol.jpg",
+      "image/pol-1.jpg",
+      "image/pol-2.jpg",
+      "image/pol-3.jpg",
       "image/mdy-pol.jpg"
     ],
     itinerary: [
