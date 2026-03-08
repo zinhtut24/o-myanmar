@@ -95,12 +95,7 @@ async function main() {
     data: { title: "Yangon to Thanlyin Day Trip", slug: "yangon-thanlyin-day", description: `Discover the ancient port city of Thanlyin and the Ye Le Pagoda. ${guideInclusiveText}`, location: "Yangon Region", images: ["/image/than.jpg"], isFeatured: false }
   });
   await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: thanlyinDay.id, prices: getDayPrices(110000) } });
-
-  // 8. Yangon - Mount Popa Day trip (Guide + Car)
-  const ygnPopa = await prisma.tourPackage.create({
-    data: { title: "Yangon to Mount Popa Day Trip", slug: "yangon-popa-day", description: `An epic day trip from Yangon to the mystical Mount Popa. ${guideInclusiveText}`, location: "Mandalay Region", images: ["/image/pp.jpg"], isFeatured: false }
-  });
-  await prisma.tourPlan.create({ data: { name: "Day Return Tour", durationDays: 1, tourPackageId: ygnPopa.id, prices: getDayPrices(400000) } });
+  
 
   // 9. Bagan - Mount Popa Day trip (Guide + Car)
   const bgnPopa = await prisma.tourPackage.create({

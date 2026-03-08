@@ -13,8 +13,8 @@ import Link from "next/link";
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d122045.312345678!2d96.481!3d17.330!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30c1737750!2sBago!5e0!3m2!1sen!2smm!4v123456789",
     images: [
       "image/bago.jpg",
-      "image/bago.jpg",
-      "image/bago.jpg",
+      "image/bg-1.jpg",
+      "image/bg-2.jpg",
       "image/bago.jpg"
     ],
     itinerary: [

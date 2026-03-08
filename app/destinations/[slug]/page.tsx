@@ -1,6 +1,6 @@
 import { prisma } from "../../../lib/prisma";
 import { notFound } from "next/navigation";
-import { MapPin, ArrowLeft, CheckCircle2, Car, Calendar, CreditCard, UserCheck, Info } from "lucide-react";
+import { MapPin, ArrowLeft, CheckCircle2, Car, Calendar, CreditCard, UserCheck, Info, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 export default async function TourDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -24,10 +24,8 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
 
   if (!tour) notFound();
 
-  // 💡 Guide ပါ/မပါ စစ်ဆေးခြင်း
   const isGuideIncluded = tour.description.toLowerCase().includes("guide");
 
-  // ✅ ငွေကြေး ပုံစံပြောင်းသည့် Function ($ ပြောင်းထားပါသည်)
   const formatMoney = (amount: any) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MMK' }).format(Number(amount));
   };
@@ -61,7 +59,6 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
               <MapPin className="w-5 h-5" />
               <span className="tracking-wide uppercase text-sm">{tour.location}</span>
             </div>
-            {/* font-black မှ font-bold သို့ ပြောင်းလဲထားသည် */}
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 leading-tight drop-shadow-lg">
               {tour.title}
             </h1>
@@ -74,6 +71,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
           
           <div className="lg:col-span-1 lg:sticky lg:top-24 space-y-6">
             
+            {/* About Tour */}
             <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2 italic">
                 <Info className="w-5 h-5 text-orange-500" /> About Tour
@@ -83,9 +81,41 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
               </p>
             </div>
 
+            {/* ✅ 🆕 CANCELLATION POLICY SECTION (အသစ်ထည့်လိုက်သည့်နေရာ) */}
+            <div className="bg-red-50/50 p-6 rounded-3xl border border-red-100 shadow-sm">
+              <h3 className="text-sm font-black text-red-900 mb-4 flex items-center gap-2 uppercase tracking-widest">
+                <AlertCircle className="w-5 h-5 text-red-600" /> Cancellation Policy
+              </h3>
+              <ul className="space-y-3 text-[12px] text-red-800/80 leading-snug">
+                <li className="flex gap-2">
+                  <span className="font-bold">•</span>
+                  <p><span className="font-bold text-red-900">Visa approval letter:</span> 100% charge and no refund.</p>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-bold">•</span>
+                  <p><span className="font-bold text-red-900">30+ Days before arrival:</span> No cancellation charge.</p>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-bold">•</span>
+                  <p><span className="font-bold text-red-900">29 - 21 Days:</span> 50% of tour fare charge.</p>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-bold">•</span>
+                  <p><span className="font-bold text-red-900">20 - 15 Days:</span> 75% of tour fare charge.</p>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-bold">•</span>
+                  <p><span className="font-bold text-red-900">Less than 15 Days:</span> 100% of tour fare charge.</p>
+                </li>
+              </ul>
+              <p className="mt-4 pt-4 border-t border-red-100 text-[10px] text-red-600 font-medium italic">
+                * All cancellations must be made in writing via email.
+              </p>
+            </div>
+
+            {/* Price Inclusive */}
             <div className="bg-white p-6 rounded-3xl shadow-md border-t-4 border-t-purple-600 space-y-5">
               <div>
-                {/* font-black မှ font-bold သို့ ပြောင်းလဲထားသည် */}
                 <h4 className="font-bold text-slate-900 flex items-center gap-2 mb-4 uppercase text-sm tracking-widest">
                   <CheckCircle2 className="w-5 h-5 text-green-500" /> 
                   Price Inclusive
@@ -98,36 +128,22 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                 </ul>
               </div>
 
+              {/* Guide Info */}
               <div className={`p-4 rounded-2xl border-2 border-dashed ${isGuideIncluded ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200'}`}>
                 <h4 className={`font-bold text-sm mb-2 flex items-center gap-2 ${isGuideIncluded ? 'text-green-800' : 'text-orange-800'}`}>
                    {isGuideIncluded ? <CheckCircle2 className="w-4 h-4" /> : <Info className="w-4 h-4" />}
                    Tour Guide Service
                 </h4>
-                {isGuideIncluded ? (
-                  <div className="space-y-2">
-                    <p className="text-xs text-orange-700 leading-relaxed">
-                      Tour guide is **Not Included** in this car rental price.
-                    </p>
-                    <div className="bg-white/60 p-2 rounded-lg border border-orange-100">
-                       <p className="text-[10px] font-bold text-slate-500 uppercase">Optional Guide Fee:</p>
-                       {/* MMK မှ $ သို့ ပြောင်းလဲထားသည် */}
-                       <p className="text-sm font-bold text-orange-600">$20 ~ $50 - $ 80 / day</p>
-                       <p className="text-[10px] text-slate-400 font-medium">*Paid directly to guide</p>
-                    </div>
+                <div className="space-y-2">
+                  <p className="text-xs text-orange-700 leading-relaxed">
+                    Tour guide is **Not Included** in this car rental price.
+                  </p>
+                  <div className="bg-white/60 p-2 rounded-lg border border-orange-100">
+                     <p className="text-[10px] font-bold text-slate-500 uppercase">Optional Guide Fee:</p>
+                     <p className="text-sm font-bold text-orange-600">$20 ~ $50 - $ 80 / day</p>
+                     <p className="text-[10px] text-slate-400 font-medium">*Paid directly to guide</p>
                   </div>
-                ) : (
-                  <div className="space-y-2">
-                    <p className="text-xs text-orange-700 leading-relaxed">
-                      Tour guide is **Not Included** in this car rental price.
-                    </p>
-                    <div className="bg-white/60 p-2 rounded-lg border border-orange-100">
-                       <p className="text-[10px] font-bold text-slate-500 uppercase">Optional Guide Fee:</p>
-                       {/* MMK မှ $ သို့ ပြောင်းလဲထားသည် */}
-                       <p className="text-sm font-bold text-orange-600">$20 ~ $50 - $ 80 / day</p>
-                       <p className="text-[10px] text-slate-400 font-medium">*Paid directly to guide</p>
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
             </div>
           </div>
@@ -140,7 +156,6 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                     <Calendar className="w-6 h-6 text-orange-400" />
                     <h2 className="text-xl font-bold tracking-tight">{plan.name}</h2>
                   </div>
-                  {/* font-black မှ font-bold သို့ ပြောင်းလဲထားသည် */}
                   <span className="bg-orange-500 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-tighter italic">
                     {plan.durationDays} Days Tour
                   </span>
@@ -153,7 +168,6 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                         <div className="relative z-10">
                           <div className="flex justify-between items-start mb-6">
                             <div>
-                              {/* font-black မှ font-bold သို့ ပြောင်းလဲထားသည် */}
                               <h3 className="font-bold text-slate-800 text-lg uppercase tracking-tighter">
                                 {priceData.vehicle.name}
                               </h3>
@@ -169,14 +183,12 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
                           <div className="space-y-3 mb-6">
                             <div className="flex justify-between items-end">
                               <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Cost</span>
-                              {/* font-black မှ font-bold သို့ ပြောင်းလဲထားသည် */}
                               <span className="font-bold text-2xl text-slate-900 leading-none">
                                 {formatMoney(priceData.price)}
                               </span>
                             </div>
                             <div className="flex justify-between items-center bg-slate-50 p-3 rounded-2xl border border-dashed border-slate-200">
                               <span className="text-[10px] font-bold text-slate-500 uppercase">Deposit Now</span>
-                              {/* font-black မှ font-bold သို့ ပြောင်းလဲထားသည် */}
                               <span className="font-bold text-purple-700">
                                 {formatMoney(priceData.deposit)}
                               </span>
